@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SDM-Lab2-DistributedGraph" target="1.5" />
+      <module name="SDM-Lab2-DistributedGraph" target="1.8" />
       <module name="spark_graphs_II" target="1.8" />
     </bytecodeTargetLevel>
   </component>

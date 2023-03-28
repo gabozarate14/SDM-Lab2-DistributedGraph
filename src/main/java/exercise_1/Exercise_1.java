@@ -1,15 +1,15 @@
 package exercise_1;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.graphx.*;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
 import org.apache.spark.storage.StorageLevel;
 import scala.Tuple2;
 import scala.collection.Iterator;
 import scala.collection.JavaConverters;
+import scala.reflect.ClassTag$;
 import scala.runtime.AbstractFunction1;
 import scala.runtime.AbstractFunction2;
 import scala.runtime.AbstractFunction3;
@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Exercise_1 {
 
@@ -56,6 +57,13 @@ public class Exercise_1 {
     }
 
     public static void maxValue(JavaSparkContext ctx) {
+        Map<Long, String> labels = ImmutableMap.<Long, String>builder()
+                .put(1l, "A")
+                .put(2l, "B")
+                .put(3l, "C")
+                .put(4l, "D")
+                .build();
+
         List<Tuple2<Object,Integer>> vertices = Lists.newArrayList(
             new Tuple2<Object,Integer>(1l,9),
             new Tuple2<Object,Integer>(2l,1),
@@ -78,17 +86,31 @@ public class Exercise_1 {
 
         GraphOps ops = new GraphOps(G, scala.reflect.ClassTag$.MODULE$.apply(Integer.class),scala.reflect.ClassTag$.MODULE$.apply(Integer.class));
 
-        Tuple2<Long,Integer> max = (Tuple2<Long,Integer>)ops.pregel(
-                Integer.MAX_VALUE,
-                Integer.MAX_VALUE,      // Run until convergence
-                EdgeDirection.Out(),
-                new VProg(),
-                new sendMsg(),
-                new merge(),
-                scala.reflect.ClassTag$.MODULE$.apply(Integer.class))
-        .vertices().toJavaRDD().first();
+//        Tuple2<Long,Integer> max = (Tuple2<Long,Integer>)ops.pregel(
+//                Integer.MAX_VALUE,
+//                Integer.MAX_VALUE,      // Run until convergence
+//                EdgeDirection.Out(),
+//                new VProg(),
+//                new sendMsg(),
+//                new merge(),
+//                scala.reflect.ClassTag$.MODULE$.apply(Integer.class))
+//        .vertices().toJavaRDD().first();
+//
+//        System.out.println(max._2 + " is the maximum value in the graph");
 
-        System.out.println(max._2 + " is the maximum value in the graph");
+        ops.pregel(Integer.MAX_VALUE,
+                        Integer.MAX_VALUE,
+                        EdgeDirection.Out(),
+                        new VProg(),
+                        new sendMsg(),
+                        new merge(),
+                        ClassTag$.MODULE$.apply(Integer.class))
+                .vertices()
+                .toJavaRDD()
+                .foreach(v -> {
+                    Tuple2<Object,Integer> vertex = (Tuple2<Object,Integer>)v;
+                    System.out.println("Minimum cost to get from "+labels.get(1l)+" to "+labels.get(vertex._1)+" is "+vertex._2);
+                });
 	}
 	
 }

@@ -16,7 +16,7 @@ import utils.Utils;
 
 public class Main {
 
-	static String HADOOP_COMMON_PATH = "SET THE ABSOLUTE PATH OF THE RESOURCE DIRECTORY WHERE THE WINUTILS IS LOCATED"; // "C:\\...\\SparkGraphXassignment\\src\\main\\resources"
+	static String HADOOP_COMMON_PATH = "C:\\Gabriel\\UPC\\Semestre 2\\SDM\\SDM-Lab2-DistributedGraph\\src\\main\\resources"; // "C:\\...\\SparkGraphXassignment\\src\\main\\resources"
 	
 	public static void main(String[] args) throws Exception {
 		System.setProperty("hadoop.home.dir", HADOOP_COMMON_PATH);
