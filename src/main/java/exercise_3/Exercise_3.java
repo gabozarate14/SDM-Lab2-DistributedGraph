@@ -103,7 +103,7 @@ public class Exercise_3 {
                 scala.reflect.ClassTag$.MODULE$.apply(Integer.class));
 
         GraphOps ops = new GraphOps(G, scala.reflect.ClassTag$.MODULE$.apply(Tuple2.class), scala.reflect.ClassTag$.MODULE$.apply(Integer.class));
-        
+
         ops.pregel(new Tuple2<>(Integer.MAX_VALUE, new ArrayList<>()),
                         Integer.MAX_VALUE,
                         EdgeDirection.Out(),

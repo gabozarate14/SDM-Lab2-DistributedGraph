@@ -23,9 +23,12 @@ import java.util.Map;
 public class Exercise_1 {
 
     private static class VProg extends AbstractFunction3<Long,Integer,Integer,Integer> implements Serializable {
+
+
         @Override
         public Integer apply(Long vertexID, Integer vertexValue, Integer message) {
-            if (message == Integer.MAX_VALUE) {             // superstep 0
+            System.out.println("VertexID: "+vertexID+" vertextValue: "+vertexValue+" message: "+message);
+            if (message == Integer.MAX_VALUE) {             // superstep 0+
                 return vertexValue;
             } else {                                        // superstep > 0
                 return Math.max(vertexValue,message);
@@ -39,11 +42,14 @@ public class Exercise_1 {
             Tuple2<Object,Integer> sourceVertex = triplet.toTuple()._1();
             Tuple2<Object,Integer> dstVertex = triplet.toTuple()._2();
 
+            System.out.println("Is vertex "+sourceVertex._1+"with value "+sourceVertex._2+" less than "+dstVertex._2+"of vertex "+ dstVertex._1+"? " + (sourceVertex._2 <= dstVertex._2));
             if (sourceVertex._2 <= dstVertex._2) {   // source vertex value is smaller than dst vertex?
                 // do nothing
+                System.out.println("-> do nothing");
                 return JavaConverters.asScalaIteratorConverter(new ArrayList<Tuple2<Object,Integer>>().iterator()).asScala();
             } else {
                 // propagate source vertex value
+                System.out.println("source vertex: "+sourceVertex._1+"--"+sourceVertex._2+"-->"+"destination_vertex:"+dstVertex._1);
                 return JavaConverters.asScalaIteratorConverter(Arrays.asList(new Tuple2<Object,Integer>(triplet.dstId(),sourceVertex._2)).iterator()).asScala();
             }
         }
@@ -51,9 +57,7 @@ public class Exercise_1 {
 
     private static class merge extends AbstractFunction2<Integer,Integer,Integer> implements Serializable {
         @Override
-        public Integer apply(Integer o, Integer o2) {
-            return null;
-        }
+        public Integer apply(Integer o, Integer o2) {return null;}
     }
 
     public static void maxValue(JavaSparkContext ctx) {
@@ -65,17 +69,17 @@ public class Exercise_1 {
                 .build();
 
         List<Tuple2<Object,Integer>> vertices = Lists.newArrayList(
-            new Tuple2<Object,Integer>(1l,9),
-            new Tuple2<Object,Integer>(2l,1),
-            new Tuple2<Object,Integer>(3l,6),
-            new Tuple2<Object,Integer>(4l,8)
+                new Tuple2<Object,Integer>(1l,9),
+                new Tuple2<Object,Integer>(2l,1),
+                new Tuple2<Object,Integer>(3l,6),
+                new Tuple2<Object,Integer>(4l,8)
         );
         List<Edge<Integer>> edges = Lists.newArrayList(
-            new Edge<Integer>(1l,2l, 1),
-            new Edge<Integer>(2l,3l, 1),
-            new Edge<Integer>(2l,4l, 1),
-            new Edge<Integer>(3l,4l, 1),
-            new Edge<Integer>(3l,1l, 1)
+                new Edge<Integer>(1l,2l, 1),
+                new Edge<Integer>(2l,3l, 1),
+                new Edge<Integer>(2l,4l, 1),
+                new Edge<Integer>(3l,4l, 1),
+                new Edge<Integer>(3l,1l, 1)
         );
 
         JavaRDD<Tuple2<Object,Integer>> verticesRDD = ctx.parallelize(vertices);
@@ -111,6 +115,6 @@ public class Exercise_1 {
                     Tuple2<Object,Integer> vertex = (Tuple2<Object,Integer>)v;
                     System.out.println("Minimum cost to get from "+labels.get(1l)+" to "+labels.get(vertex._1)+" is "+vertex._2);
                 });
-	}
-	
+    }
+
 }

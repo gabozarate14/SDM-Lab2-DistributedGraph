@@ -41,7 +41,8 @@ public class Exercise_2 {
 
             if (sourceVertex._2 == Integer.MAX_VALUE) {
                 return JavaConverters.asScalaIteratorConverter(new ArrayList<Tuple2<Object,Integer>>().iterator()).asScala();
-            } else if (sourceVertex._2 + triplet.attr() < dstVertex._2) {
+            } else
+                if (sourceVertex._2 + triplet.attr() < dstVertex._2) {
                 // propagate updated minimum distance
                 return JavaConverters.asScalaIteratorConverter(Arrays.asList(new Tuple2<Object,Integer>(triplet.dstId(),sourceVertex._2 + triplet.attr())).iterator()).asScala();
             } else {
